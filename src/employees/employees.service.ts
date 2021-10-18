@@ -4,7 +4,7 @@ import { Employee } from './schema/employee.entity';
 import { Model, mongo } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
-import { PagintaionQueryDto } from 'src/common/dto/pagintaion-query.dto';
+import { PagintaionQueryDto } from '../common/dto/pagintaion-query.dto';
 
 @Injectable()
 export class EmployeesService {
@@ -24,7 +24,7 @@ export class EmployeesService {
    }
 
    async findOneEmployee(id: string){
-      const employee = await this.employeeModel.findOne({_id: id}).exec();
+      const employee = await this.employeeModel.findOne({_id: id});
 
       if(!employee)
           throw new NotFoundException(`Employee with id number: ${id} not found`)
@@ -41,8 +41,6 @@ export class EmployeesService {
    async updateEmployeeInfo(id: string, updateEmployeeDto: UpdateEmployeeDto){
        const existingEmployee = await this.employeeModel
        .findByIdAndUpdate(new mongo.ObjectId(id), {$set: updateEmployeeDto}, {new: true}).exec();
-       
-      /// console.log(existingEmployee)
 
        if(!existingEmployee)
           throw new NotFoundException(`Employee with id number: ${id} not found`)
